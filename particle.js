@@ -1,18 +1,15 @@
 const particleArr = [];
-let i;
 
 class Particle {
   constructor() {
-    this.x = bird.x;
-    this.y = bird.y + bird.height / 2;
-    this.size = Math.random() * 7 + 3;
-    this.speedY = Math.random() * 1 - 0.5;
-    this.color = `hsla(${hue}, 100%, 50%, 0.8)`;
-  }
-
-  update() {
-    this.x -= gameSpeed;
-    this.y += this.speedY;
+    const sizeThreshold = spacePressed ? 10 : 2;
+    this.isBurning = spacePressed;
+    this.x = flapper.x + flapper.width / 2;
+    this.y = flapper.y + flapper.height - 2;
+    this.size = Math.random() * sizeThreshold;
+    this.speedY = Math.random();
+    this.color = this.isBurning ? colors.flame : "rgba(0,100, 150, 0.5)";
+    this.xThreshold = Math.random() - 0.5;
   }
 
   draw() {
@@ -21,18 +18,29 @@ class Particle {
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
     ctx.fill();
   }
+
+  update() {
+    this.x -= gameSpeed + this.xThreshold;
+    this.y += this.speedY;
+    this.color = this.isBurning ? colors.flame : "rgba(0,100, 150, 0.25)";
+    this.draw();
+  }
 }
 
 function handleParticles() {
   particleArr.unshift(new Particle());
-  for (i = 0; i < particleArr.length; i++) {
+
+  for (let i = 0; i < particleArr.length; i++) {
     particleArr[i].update();
-    particleArr[i].draw();
   }
 
-  if (particleArr.length > 100) {
-    for (i = 0; i < 20; i++) {
+  if (particleArr.length > 500) {
+    for (let i = 0; i < 40; i++) {
       particleArr.pop();
     }
   }
+}
+
+function refreshParticles() {
+  particleArr.length = 0;
 }
