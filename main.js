@@ -1,3 +1,9 @@
+const scoreDiv = document.getElementById("score");
+const gameOverScoreSpan = document.getElementById("gameOverScore");
+const gameOverModal = document.getElementById("gameOverModal");
+const goRight = document.getElementById("goRight");
+const flapButton = document.getElementById("flap");
+
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
@@ -5,16 +11,18 @@ function updateCanvasDimensions() {
   const windowHeight = window.screen.height;
   const windowWidth = window.screen.width;
   canvas.width = windowWidth;
-  if (windowWidth < 400) {
-    // portrait on mobile size screens
+  canvas.height = 500;
+  if (windowWidth < 800) {
     canvas.height = windowHeight;
-  } else {
-    canvas.height = 400;
   }
 }
+window.addEventListener("load", updateCanvasDimensions);
 window.addEventListener("resize", updateCanvasDimensions);
 window.addEventListener("DOMContentLoaded", updateCanvasDimensions);
 
+/**
+ * Initiate a Flapper
+ */
 const flapper = new Flapper();
 
 const gradient = ctx.createLinearGradient(0, 0, 0, 240);
@@ -52,23 +60,18 @@ function animate() {
 animate();
 
 function drawScore() {
-  ctx.fillStyle = gradient;
-  ctx.font = "80px Arial";
-  ctx.strokeText(score, 521, 80);
-  ctx.fillText(score, 520, 79);
+  scoreDiv.innerText = score;
 }
 
 function handleCollision() {
   gameOver = true;
   canRestart = false;
+
+  // draw bang
   ctx.drawImage(bang, flapper.x - 10, flapper.y - 20, 50, 50);
-  ctx.font = "24px Arial";
-  ctx.fillStyle = "#fafafa";
-  ctx.fillText(
-    `Game over, your score is ${score}.`,
-    160,
-    canvas.height / 2 - 10
-  );
+
+  gameOverScoreSpan.innerText = score;
+  gameOverModal.style.display = "block";
 
   setTimeout(function () {
     canRestart = true;
@@ -84,6 +87,7 @@ function refreshGame() {
   hue = 0;
   frame = 0;
   gameOver = false;
+  gameOverModal.style.display = "none";
   animate();
 }
 
@@ -112,13 +116,25 @@ window.addEventListener("keyup", function (e) {
 window.addEventListener("touchstart", function () {
   if (gameOver && canRestart) {
     refreshGame();
-  } else {
-    spacePressed = true;
   }
 });
-window.addEventListener("touchend", function () {
+
+flapButton.addEventListener("touchstart", function () {
+  spacePressed = true;
+});
+flapButton.addEventListener("touchend", function () {
   spacePressed = false;
 });
-window.addEventListener("touchcancel", function () {
+flapButton.addEventListener("touchcancel", function () {
   spacePressed = false;
+});
+
+goRight.addEventListener("touchstart", function () {
+  gameSpeed = MAX_GAME_SPEED;
+});
+goRight.addEventListener("touchend", function () {
+  gameSpeed = 0;
+});
+goRight.addEventListener("touchcancel", function () {
+  gameSpeed = 0;
 });

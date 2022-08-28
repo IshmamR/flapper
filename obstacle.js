@@ -25,22 +25,44 @@ class Pipe {
     this.draw();
   }
 
+  isHit() {
+    const collisionY =
+      flapper.y < this.top || flapper.y > canvas.height - this.bottom;
+    const collisionX =
+      flapper.x + flapper.width > this.x && flapper.x < this.x + this.width;
+    return collisionY && collisionX;
+  }
+
   offScreen() {
     return this.x < -this.width;
   }
+
+  refresh() {
+    this.top = (Math.random() * canvas.height) / 3 + 20;
+    this.bottom = (Math.random() * canvas.height) / 3 + 20;
+    this.x = canvas.width;
+    this.counted = false;
+  }
 }
 
+let pooledPipe = null;
 function handlePipes() {
   if (frame % 80 === 0 && gameSpeed) {
-    pipesArr.unshift(new Pipe()); // adds in front of pipesArray
+    // add pooledPipe if exists; else creates a new pipe
+    // this way no pipe is deleted and pipes are created only if needed to fit screen
+    const pipeToAdd = pooledPipe ?? new Pipe();
+    pipesArr.unshift(pipeToAdd); // adds in front of pipesArray
+    pooledPipe = null;
   }
+  // console.log(pipesArr.length);
 
   for (let i = 0; i < pipesArr.length; i++) {
     pipesArr[i].update();
 
-    // remove from array if offscreen
+    // object pooling for offscreen pipes
     if (pipesArr[i].offScreen()) {
-      pipesArr.pop();
+      pooledPipe = pipesArr.pop() ?? null;
+      if (pooledPipe) pooledPipe.refresh();
     }
   }
 }
@@ -50,14 +72,9 @@ function getCollision() {
     const flapperInsideScreen =
       flapper.y + flapper.height > 0 &&
       flapper.y + flapper.height < canvas.height;
-    const collisionY =
-      flapper.y < pipesArr[i].top ||
-      flapper.y > canvas.height - pipesArr[i].bottom;
-    const collisionX =
-      flapper.x + flapper.width > pipesArr[i].x &&
-      flapper.x < pipesArr[i].x + pipesArr[i].width;
+    const collision = pipesArr[i].isHit();
 
-    if (flapperInsideScreen && collisionX && collisionY) {
+    if (flapperInsideScreen && collision) {
       return true;
     }
   }

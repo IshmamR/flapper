@@ -39,4 +39,8 @@ class Flapper {
       this.vy -= 1.6;
     }
   }
+
+  getIsInsideScreen() {
+    return this.y + this.height > 0 && this.y + this.height < canvas.height;
+  }
 }
