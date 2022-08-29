@@ -2,8 +2,10 @@ const pipesArr = [];
 
 class Pipe {
   constructor() {
-    this.top = (Math.random() * canvas.height) / 3 + 20;
-    this.bottom = (Math.random() * canvas.height) / 3 + 20;
+    const spacing = random(20, canvas.height / 2);
+    const centerY = random(spacing, canvas.height - spacing);
+    this.top = centerY - spacing / 2;
+    this.bottom = canvas.height - (centerY + spacing / 2);
     this.x = canvas.width;
     this.width = 40;
     this.color = "green";
@@ -38,8 +40,10 @@ class Pipe {
   }
 
   refresh() {
-    this.top = (Math.random() * canvas.height) / 3 + 20;
-    this.bottom = (Math.random() * canvas.height) / 3 + 20;
+    const spacing = random(100, canvas.height / 3);
+    const centerY = random(spacing, canvas.height - spacing);
+    this.top = centerY - spacing / 2;
+    this.bottom = canvas.height - (centerY + spacing / 2);
     this.x = canvas.width;
     this.counted = false;
   }
@@ -47,7 +51,7 @@ class Pipe {
 
 let pooledPipe = null;
 function handlePipes() {
-  if (frame % 80 === 0 && gameSpeed) {
+  if (frame % PIPE_PER_FRAME === 0 && gameSpeed) {
     // add pooledPipe if exists; else creates a new pipe
     // this way no pipe is deleted and pipes are created only if needed to fit screen
     const pipeToAdd = pooledPipe ?? new Pipe();

@@ -3,7 +3,6 @@ const MAXIMUM_VELOCITY = 10;
 const GRAVITY = 0.49;
 const BOTTOM_THRESHOLD = 20;
 const FLAPPER_POSITION = 100;
-const MAX_GAME_SPEED = 3;
 
 // colors
 const colors = {
@@ -11,6 +10,8 @@ const colors = {
 };
 
 // game states
+let MAX_GAME_SPEED = 3;
+let PIPE_PER_FRAME = 120;
 let spacePressed = false;
 let score = 0;
 let angle = 0;
