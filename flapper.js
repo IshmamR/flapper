@@ -33,18 +33,21 @@ class Flapper {
 
   draw() {
     ctx.fillStyle = "red";
-    // ctx.fillRect(this.x, this.y, this.width, this.height);
-    ctx.drawImage(
-      flapperSprite,
-      0,
-      0,
-      flapperSprite.width,
-      flapperSprite.height,
-      this.x - 10,
-      this.y - 7.5,
-      this.spriteWidth,
-      this.spriteHeight
-    );
+    if (showBareBone) {
+      ctx.fillRect(this.x, this.y, this.width, this.height);
+    } else {
+      ctx.drawImage(
+        flapperSprite,
+        0,
+        0,
+        flapperSprite.width,
+        flapperSprite.height,
+        this.x - 10,
+        this.y - 7.5,
+        this.spriteWidth,
+        this.spriteHeight
+      );
+    }
   }
 
   flap() {

@@ -22,6 +22,7 @@ let gameOver = false;
 let canRestart = false;
 let bgPlaying = false;
 let isMute = false;
+let showBareBone = false;
 
 const bang = new Image();
 bang.src = "./bang.png";

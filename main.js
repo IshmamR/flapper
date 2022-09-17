@@ -41,8 +41,10 @@ gradient.addColorStop("0.8", "#ffffff");
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  handleBackground();
-  handleParticles();
+  if (!showBareBone) {
+    handleBackground();
+    handleParticles();
+  }
 
   handlePipes();
 
@@ -78,7 +80,9 @@ function handleCollision() {
   bgAudio.currentTime = 0;
 
   // draw bang
-  ctx.drawImage(bang, flapper.x, flapper.y - 10, 50, 50);
+  if (!showBareBone) {
+    ctx.drawImage(bang, flapper.x, flapper.y - 10, 50, 50);
+  }
 
   gameOverScoreSpan.innerText = score;
   gameOverModal.style.display = "block";
@@ -129,6 +133,11 @@ window.addEventListener("keydown", function (e) {
     }
   } else if (e.code === "ArrowRight") {
     gameSpeed = MAX_GAME_SPEED;
+  }
+
+  // bareBone toggle
+  if (e.key === "b") {
+    showBareBone = !showBareBone;
   }
 });
 // key up

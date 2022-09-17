@@ -35,53 +35,64 @@ class Pipe {
 
   draw() {
     ctx.fillStyle = this.color;
-    // ctx.fillRect(this.x, 0, this.width, this.top); // top pipe
-    const a1 = Math.floor(this.top / spriteHeight); // 5.6 -> 5
-    const b = this.top - a1 * spriteHeight;
-    ctx.drawImage(this.pipe.mid, this.x, -b, this.width, spriteHeight);
-    ctx.drawImage(
-      this.pipe.mid,
-      this.x,
-      spriteHeight - b,
-      this.width,
-      spriteHeight
-    );
-    for (let i = 1; i < a1; i++) {
+    if (showBareBone) {
+      ctx.fillRect(this.x, 0, this.width, this.top); // top pipe
+    } else {
+      const a1 = Math.floor(this.top / spriteHeight); // 5.6 -> 5
+      const b = this.top - a1 * spriteHeight;
+      ctx.drawImage(this.pipe.mid, this.x, -b, this.width, spriteHeight);
       ctx.drawImage(
         this.pipe.mid,
         this.x,
-        spriteHeight * i,
+        spriteHeight - b,
+        this.width,
+        spriteHeight
+      );
+      for (let i = 1; i < a1; i++) {
+        ctx.drawImage(
+          this.pipe.mid,
+          this.x,
+          spriteHeight * i,
+          this.width,
+          spriteHeight
+        );
+      }
+      ctx.drawImage(
+        this.pipe.bot,
+        this.x,
+        spriteHeight * a1,
         this.width,
         spriteHeight
       );
     }
-    ctx.drawImage(
-      this.pipe.bot,
-      this.x,
-      spriteHeight * a1,
-      this.width,
-      spriteHeight
-    );
 
-    // ctx.fillRect(this.x, canvas.height - this.bottom, this.width, this.bottom); // bottom pipe
-    const bottomPipeTop = canvas.height - this.bottom;
-    ctx.drawImage(
-      this.pipe.top,
-      this.x,
-      bottomPipeTop,
-      this.width,
-      spriteHeight
-    );
-    const bottomPipeMidStart = bottomPipeTop + spriteHeight;
-    const a2 = Math.ceil(canvas.height - bottomPipeMidStart / spriteHeight); // 5.6 -> 6
-    for (let i = 0; i < a2; i++) {
-      ctx.drawImage(
-        this.pipe.mid,
+    if (showBareBone) {
+      ctx.fillRect(
         this.x,
-        spriteHeight * i + bottomPipeMidStart,
+        canvas.height - this.bottom,
+        this.width,
+        this.bottom
+      ); // bottom pipe
+    } else {
+      const bottomPipeTop = canvas.height - this.bottom;
+      ctx.drawImage(
+        this.pipe.top,
+        this.x,
+        bottomPipeTop,
         this.width,
         spriteHeight
       );
+      const bottomPipeMidStart = bottomPipeTop + spriteHeight;
+      const a2 = Math.ceil(canvas.height - bottomPipeMidStart / spriteHeight); // 5.6 -> 6
+      for (let i = 0; i < a2; i++) {
+        ctx.drawImage(
+          this.pipe.mid,
+          this.x,
+          spriteHeight * i + bottomPipeMidStart,
+          this.width,
+          spriteHeight
+        );
+      }
     }
   }
 
