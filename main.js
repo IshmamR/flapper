@@ -15,6 +15,8 @@ function updateCanvasDimensions() {
   if (windowWidth < 800) {
     canvas.height = windowHeight;
   }
+
+  calibrateBG();
 }
 window.addEventListener("load", updateCanvasDimensions);
 window.addEventListener("resize", updateCanvasDimensions);
@@ -34,6 +36,7 @@ gradient.addColorStop("0.8", "#ffffff");
 
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  handleBackground();
 
   handlePipes();
 
@@ -66,9 +69,12 @@ function drawScore() {
 function handleCollision() {
   gameOver = true;
   canRestart = false;
+  crashAudio.play();
+  bgAudio.pause();
+  bgAudio.currentTime = 0;
 
   // draw bang
-  ctx.drawImage(bang, flapper.x - 10, flapper.y - 20, 50, 50);
+  ctx.drawImage(bang, flapper.x, flapper.y - 10, 50, 50);
 
   gameOverScoreSpan.innerText = score;
   gameOverModal.style.display = "block";
@@ -88,13 +94,30 @@ function refreshGame() {
   frame = 0;
   gameOver = false;
   gameOverModal.style.display = "none";
+  if (!isMute) bgAudio.play();
   animate();
 }
 
 // key down
 window.addEventListener("keydown", function (e) {
+  if (e.key === "m") {
+    if (isMute) {
+      if (!gameOver) bgAudio.play();
+      isMute = false;
+      bgPlaying = true;
+    } else {
+      bgAudio.pause();
+      isMute = true;
+      bgPlaying = false;
+    }
+  }
+
+  if (!bgPlaying && !isMute) {
+    bgAudio.play();
+    bgPlaying = true;
+  }
+
   if (e.code === "Space" || e.code === "ArrowUp") {
-    // alert(gameOver);
     if (gameOver && canRestart) {
       refreshGame();
     } else {
@@ -120,6 +143,10 @@ window.addEventListener("touchstart", function () {
 });
 
 flapButton.addEventListener("touchstart", function () {
+  if (!bgPlaying) {
+    bgPlaying = !bgPlaying;
+    bgAudio.play();
+  }
   spacePressed = true;
 });
 flapButton.addEventListener("touchend", function () {

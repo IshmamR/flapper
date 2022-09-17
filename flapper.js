@@ -3,8 +3,10 @@ class Flapper {
     this.x = FLAPPER_POSITION;
     this.y = 200;
     this.vy = 0;
-    this.width = 20;
-    this.height = 20;
+    this.width = 40;
+    this.height = 30;
+    this.spriteWidth = 60;
+    this.spriteHeight = 45;
     this.weight = 1 * GRAVITY;
   }
 
@@ -30,8 +32,19 @@ class Flapper {
   }
 
   draw() {
-    ctx.fillStyle = "blue";
-    ctx.fillRect(this.x, this.y, this.width, this.height);
+    ctx.fillStyle = "red";
+    // ctx.fillRect(this.x, this.y, this.width, this.height);
+    ctx.drawImage(
+      flapperSprite,
+      0,
+      0,
+      flapperSprite.width,
+      flapperSprite.height,
+      this.x - 10,
+      this.y - 7.5,
+      this.spriteWidth,
+      this.spriteHeight
+    );
   }
 
   flap() {
