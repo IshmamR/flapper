@@ -24,7 +24,7 @@ let bgPlaying = false;
 let isMute = false;
 
 const bang = new Image();
-bang.src = "/bang.png";
+bang.src = "./bang.png";
 
 const flapperSprite = new Image();
 flapperSprite.src = "./flapper.png";
