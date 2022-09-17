@@ -3,9 +3,13 @@ const pipesArr = [];
 const spriteWidth = 32;
 const spriteHeight = 20;
 
-function getRandomPipe() {
+function getRandomColor() {
   const int = Math.floor(Math.random() * 2); // gives 0 or 1
-  if (int === 0) {
+  if (int === 0) return "gold";
+  else return "purple";
+}
+function getPipe(color) {
+  if (color === "gold") {
     return {
       top: goldPipeTop,
       mid: goldPipeMid,
@@ -28,9 +32,9 @@ class Pipe {
     this.bottom = canvas.height - (centerY + spacing / 2);
     this.x = canvas.width;
     this.width = random(40, 60);
-    this.color = "silver";
     this.counted = false;
-    this.pipe = getRandomPipe();
+    this.color = getRandomColor();
+    this.pipe = getPipe(this.color);
   }
 
   draw() {
@@ -125,7 +129,8 @@ class Pipe {
     this.x = canvas.width;
     this.width = random(40, 60);
     this.counted = false;
-    this.pipe = getRandomPipe();
+    this.color = getRandomColor();
+    this.pipe = getPipe(this.color);
   }
 }
 
