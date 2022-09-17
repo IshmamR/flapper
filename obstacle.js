@@ -120,7 +120,7 @@ class Pipe {
 
 // object pooling
 let pooledPipe = null;
-function handlePipes() {
+function generatePipes() {
   if (frame % 100 === 0 && gameSpeed > 0) {
     // add pooledPipe if exists; else creates a new pipe
     // this way no pipe is deleted and pipes are created only if needed to fit screen

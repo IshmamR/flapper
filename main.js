@@ -3,6 +3,10 @@ const gameOverScoreSpan = document.getElementById("gameOverScore");
 const gameOverModal = document.getElementById("gameOverModal");
 const goRight = document.getElementById("goRight");
 const flapButton = document.getElementById("flap");
+// about elements
+const aboutModal = document.getElementById("aboutModal");
+const openAboutModalButton = document.getElementById("openAboutModal");
+const closeAboutModalButton = document.getElementById("closeAboutModal");
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
@@ -36,9 +40,11 @@ gradient.addColorStop("0.8", "#ffffff");
 
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  handleBackground();
 
-  handlePipes();
+  handleBackground();
+  handleParticles();
+
+  generatePipes();
 
   flapper.update();
   if (spacePressed && flapper.y > flapper.height * 2) {
@@ -46,8 +52,6 @@ function animate() {
   }
 
   drawScore();
-
-  handleParticles();
 
   const collision = getCollision();
   if (collision) {
@@ -164,4 +168,11 @@ goRight.addEventListener("touchend", function () {
 });
 goRight.addEventListener("touchcancel", function () {
   gameSpeed = 0;
+});
+
+openAboutModalButton.addEventListener("click", function () {
+  aboutModal.classList.toggle("display");
+});
+closeAboutModalButton.addEventListener("click", function () {
+  aboutModal.classList.remove("display");
 });

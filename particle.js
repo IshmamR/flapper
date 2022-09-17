@@ -25,19 +25,31 @@ class Particle {
     this.color = this.isBurning ? colors.flame : "rgba(0,100, 150, 0.25)";
     this.draw();
   }
+
+  refresh() {
+    const sizeThreshold = spacePressed ? 10 : 2;
+    this.isBurning = spacePressed;
+    this.x = flapper.x + flapper.width / 2;
+    this.y = flapper.y + flapper.height - 2;
+    this.size = Math.random() * sizeThreshold;
+    this.speedY = Math.random();
+    this.color = this.isBurning ? colors.flame : "rgba(0,100, 150, 0.5)";
+    this.xThreshold = Math.random() - 0.5;
+  }
 }
 
+let pooledParticle = null;
 function handleParticles() {
-  particleArr.unshift(new Particle());
+  const particleToAdd = pooledParticle ?? new Particle();
+  particleArr.unshift(particleToAdd);
+  pooledParticle = null;
 
   for (let i = 0; i < particleArr.length; i++) {
     particleArr[i].update();
   }
-
-  if (particleArr.length > 500) {
-    for (let i = 0; i < 40; i++) {
-      particleArr.pop();
-    }
+  if (particleArr.length >= 500) {
+    pooledParticle = particleArr.pop() ?? null;
+    if (pooledParticle) pooledParticle.refresh();
   }
 }
 
