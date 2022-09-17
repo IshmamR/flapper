@@ -44,7 +44,7 @@ function animate() {
   handleBackground();
   handleParticles();
 
-  generatePipes();
+  handlePipes();
 
   flapper.update();
   if (spacePressed && flapper.y > flapper.height * 2) {
